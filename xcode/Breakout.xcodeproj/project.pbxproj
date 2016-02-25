@@ -17,11 +17,12 @@
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		251F99244F61433B8239E4CC /* Breakout_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = BA479A46C0D64BE0A7A8AE46 /* Breakout_Prefix.pch */; };
-		C2382591E61F476ABD6B508F /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = CA965A215D0A46C884FDA02C /* CinderApp.icns */; };
-		270C88135B364C3AAA275A76 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = B18390E23F09420E91A8A4F7 /* Resources.h */; };
 		6D9CCE43DA644C8FA17010AA /* BreakoutApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		C2382591E61F476ABD6B508F /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = CA965A215D0A46C884FDA02C /* CinderApp.icns */; };
+		D427A3DF1C7ED9280007C089 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3DD1C7ED9280007C089 /* Ball.cpp */; };
+		D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E01C7ED9850007C089 /* Paddle.cpp */; };
+		D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E31C7EE2D30007C089 /* Collisions.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,11 +40,17 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* Breakout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakout.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/BreakoutApp.cpp; sourceTree = "<group>"; name = BreakoutApp.cpp; };
-		B18390E23F09420E91A8A4F7 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
-		CA965A215D0A46C884FDA02C /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
-		9AE5C08DD4144BC1A9EAF299 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
-		BA479A46C0D64BE0A7A8AE46 /* Breakout_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Breakout_Prefix.pch; sourceTree = "<group>"; name = Breakout_Prefix.pch; };
+		9AE5C08DD4144BC1A9EAF299 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B18390E23F09420E91A8A4F7 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		BA479A46C0D64BE0A7A8AE46 /* Breakout_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Breakout_Prefix.pch; sourceTree = "<group>"; };
+		C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = BreakoutApp.cpp; path = ../src/BreakoutApp.cpp; sourceTree = "<group>"; };
+		CA965A215D0A46C884FDA02C /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		D427A3DD1C7ED9280007C089 /* Ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ball.cpp; path = ../src/Ball.cpp; sourceTree = "<group>"; };
+		D427A3DE1C7ED9280007C089 /* Ball.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ball.hpp; path = ../src/Ball.hpp; sourceTree = "<group>"; };
+		D427A3E01C7ED9850007C089 /* Paddle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Paddle.cpp; path = ../src/Paddle.cpp; sourceTree = "<group>"; };
+		D427A3E11C7ED9850007C089 /* Paddle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Paddle.hpp; path = ../src/Paddle.hpp; sourceTree = "<group>"; };
+		D427A3E31C7EE2D30007C089 /* Collisions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Collisions.cpp; path = ../src/Collisions.cpp; sourceTree = "<group>"; };
+		D427A3E41C7EE2D30007C089 /* Collisions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Collisions.hpp; path = ../src/Collisions.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,10 +75,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01B97315FEAEA392516A2CEA /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Blocks;
+			sourceTree = "<group>";
+		};
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */,
+				D427A3E31C7EE2D30007C089 /* Collisions.cpp */,
+				D427A3E41C7EE2D30007C089 /* Collisions.hpp */,
+				D427A3DD1C7ED9280007C089 /* Ball.cpp */,
+				D427A3DE1C7ED9280007C089 /* Ball.hpp */,
+				D427A3E01C7ED9850007C089 /* Paddle.cpp */,
+				D427A3E11C7ED9850007C089 /* Paddle.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -122,13 +142,6 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = Breakout;
-			sourceTree = "<group>";
-		};
-		01B97315FEAEA392516A2CEA /* Blocks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Blocks;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
@@ -184,6 +197,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Breakout" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -219,6 +234,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D427A3DF1C7ED9280007C089 /* Ball.cpp in Sources */,
+				D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */,
+				D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */,
 				6D9CCE43DA644C8FA17010AA /* BreakoutApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -230,17 +248,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Breakout_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Breakout_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -262,12 +280,12 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Breakout_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Breakout_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -284,7 +302,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = "../../../../../../Applications/Cinder";
+				CINDER_PATH = ../../../../../../Applications/Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
 				CLANG_CXX_LIBRARY = "libc++";
 				ENABLE_TESTABILITY = YES;
@@ -302,7 +320,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = "../../../../../../Applications/Cinder";
+				CINDER_PATH = ../../../../../../Applications/Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
