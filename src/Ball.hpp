@@ -16,9 +16,18 @@ using namespace ci;
 
 class Ball {
   public:
-    Ball();
-    void update( float dt );
-    void draw();
+    Ball(){
+        pos.x = 250;
+        pos.y = 300;
+        vel.x = -1;
+        vel.y = -2;
+    }
+    void update( float dt ){
+        pos += vel;
+    }
+    void draw(){
+        
+    }
     void bounce( std::string dir, float p ){
         if( dir == "hor" ){
             vel.x = -vel.x;
@@ -32,7 +41,7 @@ class Ball {
     
     vec2 pos;
     vec2 vel;
-    float radius = 15.0f;
+    float radius = 10.0f;
 };
 
 #endif /* Ball_hpp */

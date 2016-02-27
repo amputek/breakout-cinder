@@ -23,6 +23,7 @@
 		D427A3DF1C7ED9280007C089 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3DD1C7ED9280007C089 /* Ball.cpp */; };
 		D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E01C7ED9850007C089 /* Paddle.cpp */; };
 		D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E31C7EE2D30007C089 /* Collisions.cpp */; };
+		D4D1EB7D1C8083B6001A6AD5 /* Brick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,8 @@
 		D427A3E11C7ED9850007C089 /* Paddle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Paddle.hpp; path = ../src/Paddle.hpp; sourceTree = "<group>"; };
 		D427A3E31C7EE2D30007C089 /* Collisions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Collisions.cpp; path = ../src/Collisions.cpp; sourceTree = "<group>"; };
 		D427A3E41C7EE2D30007C089 /* Collisions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Collisions.hpp; path = ../src/Collisions.hpp; sourceTree = "<group>"; };
+		D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Brick.cpp; path = ../src/Brick.cpp; sourceTree = "<group>"; };
+		D4D1EB7C1C8083B6001A6AD5 /* Brick.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Brick.hpp; path = ../src/Brick.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 				C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */,
 				D427A3E31C7EE2D30007C089 /* Collisions.cpp */,
 				D427A3E41C7EE2D30007C089 /* Collisions.hpp */,
+				D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */,
+				D4D1EB7C1C8083B6001A6AD5 /* Brick.hpp */,
 				D427A3DD1C7ED9280007C089 /* Ball.cpp */,
 				D427A3DE1C7ED9280007C089 /* Ball.hpp */,
 				D427A3E01C7ED9850007C089 /* Paddle.cpp */,
@@ -238,6 +243,7 @@
 				D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */,
 				D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */,
 				6D9CCE43DA644C8FA17010AA /* BreakoutApp.cpp in Sources */,
+				D4D1EB7D1C8083B6001A6AD5 /* Brick.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

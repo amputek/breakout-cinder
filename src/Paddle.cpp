@@ -9,16 +9,16 @@
 #include "Paddle.hpp"
 
 
-Paddle::Paddle(){
-    
+Paddle::Paddle() : Block( vec2(50, 400), 200, 20 ){
+
 }
 
 void Paddle::update( float mx ){
     vx = mx - pos.x;
     pos.x = mx;
     pos.y = 400;
-    left = pos.x - 1000;
+    left = pos.x - 100;
     top = pos.y-10;
     bottom = pos.y+10;
-    right = pos.x + 1000;
+    right = pos.x + 100;
 }

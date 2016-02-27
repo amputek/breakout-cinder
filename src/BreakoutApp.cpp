@@ -3,11 +3,22 @@
 #include "cinder/gl/gl.h"
 #include "Paddle.hpp"
 #include "Ball.hpp"
+#include "Brick.hpp"
 #include "Collisions.hpp"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+
+
+float distance( vec2 a, vec2 b){
+    return sqrt( pow(a.x-b.x, 2) + pow(a.y-b.y, 2));
+}
+
+
+
+
+
 
 class BreakoutApp : public App {
   public:
@@ -17,43 +28,37 @@ class BreakoutApp : public App {
 	void update() override;
 	void draw() override;
     
-    //void createDebris( Brick brick, Source source, int blockSize );
     void addExplosion( vec2 loc );
     
   private:
     float dt = 1.0f / 60.0f;
     float mx;
-//    Lighting lighting;
     Ball ball;
     Paddle paddle;
-    Paddle topWall;
-    Paddle rightWall;
-    Paddle leftWall;
     CollisionManager collisions;
+    
+    Brick bricks[100];
     
 };
 
 void BreakoutApp::setup(){
-    
-    topWall = Paddle();
-    topWall.pos.y = 0;
-    
-    leftWall.left = -50;
-    leftWall.right = 0;
-    leftWall.top = rightWall.top = -50;
-    leftWall.bottom = rightWall.bottom = 1000;
-    
-    rightWall.left = 600;
-    rightWall.right = 700;
-    
+    setWindowSize( 400, 800 );
     paddle = *new Paddle();
     ball = *new Ball();
-    collisions = *new CollisionManager();
+    collisions = *new CollisionManager( 400, 800 );
+    
+    int i = 0;
+    for (int x = 0; x < 20; x++) {
+        for (int y = 0; y < 5; y++) {
+//            cout << "new brick: " << i << ": " << x*11 << " " << y*11 << "\n";
+            bricks[i] = *new Brick( vec2( 20 + x * 22, 20 + y * 22) );
+            i++;
+        }
+    }
+    
 }
 
-void BreakoutApp::mouseDown( MouseEvent event )
-{
-}
+void BreakoutApp::mouseDown( MouseEvent event ){}
 
 void BreakoutApp::mouseMove( MouseEvent event ){
     mx = event.getPos().x;
@@ -62,35 +67,24 @@ void BreakoutApp::mouseMove( MouseEvent event ){
 void BreakoutApp::update(){
     paddle.update( mx );
     ball.update( dt );
-//    Collision* c = new Collision();
-    collisions.ballIntercept( &ball, &paddle );
-    collisions.ballIntercept( &ball, &topWall );
-    collisions.ballIntercept( &ball, &leftWall );
-    collisions.ballIntercept( &ball, &rightWall );
-//    if( c->exists == true ){
-//        std::cout << c->dir << "\n";
-//        if( c->dir == "top" || c->dir == "bottom" ){
-//            ball.pos.y = c->pos.y;
-//            ball.vel.y = -ball.vel.y;
-//        }
-//        if( c->dir == "left" || c->dir == "right" ){
-//            ball.pos.x = c->pos.x;
-//            ball.vel.x = -ball.vel.x;
-//        }
-//    }
-//    delete c;
+    collisions.paddleCollision( &ball, &paddle );
+    collisions.wallCollision( &ball );
+    collisions.brickCollision( &ball, bricks );
 }
 
-void BreakoutApp::draw()
-{
+void BreakoutApp::draw(){
 	gl::clear( Color( 0, 0, 0 ) );
-    gl::color( Color( 20, 50, 70 ) );
-    gl::drawSolidRect( Rectf( paddle.pos.x - 50,
-                             400,
-                             paddle.pos.x + 50,
-                             410 ) );
-    
+    gl::color( Color( 0.2f, 0.5f, 0.7f ) );
+    gl::drawSolidRect( Rectf( paddle.pos.x - 100, 390, paddle.pos.x + 100, 410 ) );
     gl::drawSolidCircle( ball.pos, ball.radius );
+    
+    for (int i = 0; i < sizeof(*bricks); i++) {
+        float d = 1.0f / (distance( bricks[i].pos, ball.pos ) * 0.03f);
+        float r = 0.1f + d;
+        if( r > 1.0) r = 1.0;
+        gl::color( Color( r, r, r ) );
+        gl::drawSolidRect( Rectf( bricks[i].left, bricks[i].top, bricks[i].right, bricks[i].bottom ) );
+    }
 }
 
 CINDER_APP( BreakoutApp, RendererGl )

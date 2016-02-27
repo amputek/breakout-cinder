@@ -9,8 +9,10 @@
 #include "Collisions.hpp"
 
 
-CollisionManager::CollisionManager( ){
-    //    areaSize = size;
+CollisionManager::CollisionManager( int w, int h ){
+    topWall = *new Block( vec2(300,-10), 1000, 20 );
+    leftWall = *new Block( vec2(0,200), 10, 1000 );
+    rightWall = *new Block( vec2(w,200), 10, 1000 );
 }
 
 void CollisionManager::checkCollision( Collision *pt, vec2 a, vec2 b, vec2 c, vec2 d, string dir ){
@@ -31,10 +33,28 @@ void CollisionManager::checkCollision( Collision *pt, vec2 a, vec2 b, vec2 c, ve
     }
 }
 
+void CollisionManager::paddleCollision( Ball *ball, Paddle *rec ){
+    Block r = *(Block*) rec;
+    ballIntercept( ball, &r );
+}
 
+void CollisionManager::brickCollision( Ball *ball, Brick bricks[] ){
 
-void CollisionManager::ballIntercept( Ball *ball, Paddle *rec ){
-   
+    for (int i = 0; i < sizeof(*bricks); i++) {
+        bool a = ballIntercept( ball, &bricks[i] );
+        if( a ) return;
+    }
+}
+
+void CollisionManager::wallCollision( Ball *ball ){
+    ballIntercept( ball, &topWall );
+    ballIntercept( ball, &leftWall );
+    ballIntercept( ball, &rightWall );
+}
+
+bool CollisionManager::ballIntercept( Ball *ball, Block *rec ){
+    
+    
     Collision* pt = new Collision();
     
     float radius = ball->radius;
@@ -66,7 +86,12 @@ void CollisionManager::ballIntercept( Ball *ball, Paddle *rec ){
         if( pt->dir == "left" || pt->dir == "right" ){
             ball->bounce( "hor" , pt->pos.x );
         }
+        delete pt;
+        return true;
     }
+    
     delete pt;
+    return false;
+    
     
 }

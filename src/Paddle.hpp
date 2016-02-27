@@ -11,23 +11,36 @@
 
 using namespace ci;
 
-class Paddle {
+class Block {
   public:
-    Paddle();
-    
+    Block(){
+        pos = vec2(0,0);
+        left = pos.x - 10;
+        top = pos.y - 10;
+        bottom = pos.y + 10;
+        right = pos.x + 10;
+    }
+    Block( vec2 p, float w, float h ){
+        pos = p;
+        left = pos.x - w/2;
+        top = pos.y - h/2;
+        bottom = pos.y + h/2;
+        right = pos.x + w/2;
+//        std::cout << "new block:" << p.x << " " << p.y << "\n";
+    }
+
+    vec2 pos;
+    float left;
+    float top;
+    float bottom;
+    float right;
+};
+
+class Paddle : public Block {
+  public:
+    Paddle() ;
     void update( float dt );
     void draw();
-    
-    //void createDebris( Brick brick, Source source, int blockSize );
-    void addExplosion( vec2 loc );
-    
-//  private:
-    vec2 pos = vec2(300,0);
-    float left = pos.x - 1000;
-    float top = pos.y-10;
-    float bottom = pos.y+10;
-    float right = pos.x + 1000;
-    
     float vx = 0.0f;
 };
 
