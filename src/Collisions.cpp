@@ -33,17 +33,21 @@ void CollisionManager::checkCollision( Collision *pt, vec2 a, vec2 b, vec2 c, ve
     }
 }
 
-void CollisionManager::paddleCollision( Ball *ball, Paddle *rec ){
-    Block r = *(Block*) rec;
-    ballIntercept( ball, &r );
+void CollisionManager::paddleCollision( Ball *ball, Block *rec ){
+//    Block r = *(Block*) rec;
+    ballIntercept( ball, rec );
 }
 
-void CollisionManager::brickCollision( Ball *ball, Brick bricks[] ){
-
-    for (int i = 0; i < sizeof(*bricks); i++) {
-        bool a = ballIntercept( ball, &bricks[i] );
-        if( a ) return;
-    }
+bool CollisionManager::brickCollision( Ball *ball, Block *brick ){
+//    for (int i = 0; i < sizeof(*bricks); i++) {
+//        if( bricks[i].isAlive() ){
+    return ballIntercept( ball, brick );
+//            if( a ){
+//                bricks[i].kill();
+//                return;
+//            }
+//        }
+//    }
 }
 
 void CollisionManager::wallCollision( Ball *ball ){

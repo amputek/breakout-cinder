@@ -10,7 +10,7 @@
 #define Ball_hpp
 
 #include <stdio.h>
-
+#include "Renderer.hpp"
 
 using namespace ci;
 
@@ -25,8 +25,8 @@ class Ball {
     void update( float dt ){
         pos += vel;
     }
-    void draw(){
-        
+    void draw( GameRenderer *renderer ){
+        renderer->drawBall( pos, radius );
     }
     void bounce( std::string dir, float p ){
         if( dir == "hor" ){

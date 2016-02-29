@@ -5,19 +5,15 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
 #include "Collisions.hpp"
+#include "Lighting.hpp"
+#include "Math.hpp"
+#include "Renderer.hpp"
+#include "cinder/Rand.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-
-
-float distance( vec2 a, vec2 b){
-    return sqrt( pow(a.x-b.x, 2) + pow(a.y-b.y, 2));
-}
-
-
-
-
+using namespace math;
 
 
 class BreakoutApp : public App {
@@ -31,6 +27,14 @@ class BreakoutApp : public App {
     void addExplosion( vec2 loc );
     
   private:
+    
+    void drawShadow( vector<vec2> );
+    
+    void setBlendFunction( string bf );
+    
+    Lighting lighting;
+    GameRenderer renderer;
+    
     float dt = 1.0f / 60.0f;
     float mx;
     Ball ball;
@@ -38,7 +42,7 @@ class BreakoutApp : public App {
     CollisionManager collisions;
     
     Brick bricks[100];
-    
+
 };
 
 void BreakoutApp::setup(){
@@ -46,16 +50,20 @@ void BreakoutApp::setup(){
     paddle = *new Paddle();
     ball = *new Ball();
     collisions = *new CollisionManager( 400, 800 );
+    lighting = *new Lighting();
+    renderer = *new GameRenderer( toPixels( getWindowSize() ) );
     
     int i = 0;
-    for (int x = 0; x < 20; x++) {
-        for (int y = 0; y < 5; y++) {
-//            cout << "new brick: " << i << ": " << x*11 << " " << y*11 << "\n";
-            bricks[i] = *new Brick( vec2( 20 + x * 22, 20 + y * 22) );
-            i++;
+    int y = 0;
+    while( i < 100 ){
+        for (int x = 0; x < 16; x++) {
+            if( Rand::randBool() ){
+                bricks[i] = *new Brick( vec2( 20 + x * 24, 20 + y * 24) );
+                i++;
+            }
         }
+        y++;
     }
-    
 }
 
 void BreakoutApp::mouseDown( MouseEvent event ){}
@@ -70,21 +78,34 @@ void BreakoutApp::update(){
     collisions.paddleCollision( &ball, &paddle );
     collisions.wallCollision( &ball );
     collisions.brickCollision( &ball, bricks );
+    for (int i = 0; i < sizeof(*bricks); i++) {
+        if( bricks[i].isAlive() ){
+            if( collisions.brickCollision( &ball, &bricks[i] ) ){
+               bricks[i].kill();
+            }
+        }
+    }
+    renderer.drawLightGlows(0, ball.pos, 200 );
+    renderer.drawShadow(0, lighting.getShadow( ball.pos, paddle ) );
+    for (int i = 0; i < sizeof(*bricks); i++) {
+        if( bricks[i].isAlive() ){
+            renderer.drawShadow( 0, lighting.getShadow( ball.pos, bricks[i] ) );
+        }
+    }
 }
 
+
 void BreakoutApp::draw(){
-	gl::clear( Color( 0, 0, 0 ) );
-    gl::color( Color( 0.2f, 0.5f, 0.7f ) );
-    gl::drawSolidRect( Rectf( paddle.pos.x - 100, 390, paddle.pos.x + 100, 410 ) );
-    gl::drawSolidCircle( ball.pos, ball.radius );
+    
+    renderer.drawBackground();
+    renderer.drawLighting();
+    paddle.draw( &renderer );
     
     for (int i = 0; i < sizeof(*bricks); i++) {
-        float d = 1.0f / (distance( bricks[i].pos, ball.pos ) * 0.03f);
-        float r = 0.1f + d;
-        if( r > 1.0) r = 1.0;
-        gl::color( Color( r, r, r ) );
-        gl::drawSolidRect( Rectf( bricks[i].left, bricks[i].top, bricks[i].right, bricks[i].bottom ) );
+        if( bricks[i].isAlive() ) bricks[i].draw( &renderer );
     }
+    
+    ball.draw( &renderer );
 }
 
 CINDER_APP( BreakoutApp, RendererGl )

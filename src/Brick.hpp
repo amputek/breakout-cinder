@@ -9,7 +9,8 @@
 #ifndef Brick_hpp
 #define Brick_hpp
 
-#include "Paddle.hpp"
+#include "Block.hpp"
+#include "Renderer.hpp"
 #include <stdio.h>
 
 class Brick : public Block {
@@ -24,9 +25,20 @@ public:
         
     }
     void update( float dt );
-    void draw();
-    float vx = 0.0f;
+    void draw( GameRenderer *renderer ){
+        renderer->drawBrick("brick",left,top,20,20);
+    }
+    void kill(){
+        alive = false;
+    }
+    bool isAlive(){
+        return alive;
+    }
     std::string type = "brick";
+    
+
+  private:
+    bool alive = true;
     bool markedForDeath = false;
 };
 

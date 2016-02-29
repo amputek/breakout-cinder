@@ -20,6 +20,10 @@
 		6D9CCE43DA644C8FA17010AA /* BreakoutApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		C2382591E61F476ABD6B508F /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = CA965A215D0A46C884FDA02C /* CinderApp.icns */; };
+		D425BC8B1C82A20100B08EFD /* Lighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D425BC891C82A20100B08EFD /* Lighting.cpp */; };
+		D425BC8E1C82A29300B08EFD /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D425BC8C1C82A29300B08EFD /* Math.cpp */; };
+		D425BC911C82A79100B08EFD /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D425BC8F1C82A79100B08EFD /* Renderer.cpp */; };
+		D425BC941C8405C800B08EFD /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D425BC921C8405C800B08EFD /* Block.cpp */; };
 		D427A3DF1C7ED9280007C089 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3DD1C7ED9280007C089 /* Ball.cpp */; };
 		D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E01C7ED9850007C089 /* Paddle.cpp */; };
 		D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E31C7EE2D30007C089 /* Collisions.cpp */; };
@@ -46,6 +50,14 @@
 		BA479A46C0D64BE0A7A8AE46 /* Breakout_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Breakout_Prefix.pch; sourceTree = "<group>"; };
 		C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = BreakoutApp.cpp; path = ../src/BreakoutApp.cpp; sourceTree = "<group>"; };
 		CA965A215D0A46C884FDA02C /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		D425BC891C82A20100B08EFD /* Lighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Lighting.cpp; path = ../src/Lighting.cpp; sourceTree = "<group>"; };
+		D425BC8A1C82A20100B08EFD /* Lighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Lighting.hpp; path = ../src/Lighting.hpp; sourceTree = "<group>"; };
+		D425BC8C1C82A29300B08EFD /* Math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Math.cpp; path = ../src/Math.cpp; sourceTree = "<group>"; };
+		D425BC8D1C82A29300B08EFD /* Math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Math.hpp; path = ../src/Math.hpp; sourceTree = "<group>"; };
+		D425BC8F1C82A79100B08EFD /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = ../src/Renderer.cpp; sourceTree = "<group>"; };
+		D425BC901C82A79100B08EFD /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = ../src/Renderer.hpp; sourceTree = "<group>"; };
+		D425BC921C8405C800B08EFD /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Block.cpp; path = ../src/Block.cpp; sourceTree = "<group>"; };
+		D425BC931C8405C800B08EFD /* Block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Block.hpp; path = ../src/Block.hpp; sourceTree = "<group>"; };
 		D427A3DD1C7ED9280007C089 /* Ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ball.cpp; path = ../src/Ball.cpp; sourceTree = "<group>"; };
 		D427A3DE1C7ED9280007C089 /* Ball.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ball.hpp; path = ../src/Ball.hpp; sourceTree = "<group>"; };
 		D427A3E01C7ED9850007C089 /* Paddle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Paddle.cpp; path = ../src/Paddle.cpp; sourceTree = "<group>"; };
@@ -89,8 +101,16 @@
 			isa = PBXGroup;
 			children = (
 				C6150F68BB7C4AF0961B05B6 /* BreakoutApp.cpp */,
+				D425BC891C82A20100B08EFD /* Lighting.cpp */,
+				D425BC8A1C82A20100B08EFD /* Lighting.hpp */,
+				D425BC8F1C82A79100B08EFD /* Renderer.cpp */,
+				D425BC901C82A79100B08EFD /* Renderer.hpp */,
+				D425BC8C1C82A29300B08EFD /* Math.cpp */,
+				D425BC8D1C82A29300B08EFD /* Math.hpp */,
 				D427A3E31C7EE2D30007C089 /* Collisions.cpp */,
 				D427A3E41C7EE2D30007C089 /* Collisions.hpp */,
+				D425BC921C8405C800B08EFD /* Block.cpp */,
+				D425BC931C8405C800B08EFD /* Block.hpp */,
 				D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */,
 				D4D1EB7C1C8083B6001A6AD5 /* Brick.hpp */,
 				D427A3DD1C7ED9280007C089 /* Ball.cpp */,
@@ -239,8 +259,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D425BC941C8405C800B08EFD /* Block.cpp in Sources */,
 				D427A3DF1C7ED9280007C089 /* Ball.cpp in Sources */,
+				D425BC8E1C82A29300B08EFD /* Math.cpp in Sources */,
+				D425BC8B1C82A20100B08EFD /* Lighting.cpp in Sources */,
 				D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */,
+				D425BC911C82A79100B08EFD /* Renderer.cpp in Sources */,
 				D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */,
 				6D9CCE43DA644C8FA17010AA /* BreakoutApp.cpp in Sources */,
 				D4D1EB7D1C8083B6001A6AD5 /* Brick.cpp in Sources */,
