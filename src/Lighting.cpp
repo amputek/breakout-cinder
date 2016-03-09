@@ -106,12 +106,12 @@ vector<vec2> Lighting::getShadowShape( int index, Block &object ){
     return result;
 }
 
-vector< vector<vec2> > Lighting::getShadows( vec2 source, vector<Block*> objects ){
-    vector<vector<vec2>> v(100, vector<vec2>(5) );
-    for (int i = 0; i < objects.size(); i++) {
-        Block b = *objects.at(i);
-        vector<vec2> corners = getShadowShape( source, b );
-        v.push_back( corners );
-     }
-    return v;
-}
+//vector< vector<vec2> > Lighting::getShadows( vec2 source, vector<Block*> objects ){
+//    vector<vector<vec2>> v(100, vector<vec2>(5) );
+//    for (int i = 0; i < objects.size(); i++) {
+//        Block b = *objects.at(i);
+//        vector<vec2> corners = getShadowShape( source, b );
+//        v.push_back( corners );
+//     }
+//    return v;
+//}
