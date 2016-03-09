@@ -53,9 +53,14 @@ class BricksManager{
 public:
     BricksManager(){}
     vector<Brick*> bricks;
-    void addBrick( int x, int y ){
-        Brick* b = new Brick( vec2( 40 + x * 18, 40 + y * 18), 14 );
-        bricks.push_back( b );
+    void addBrick( int x, int y, string type ){
+        if( type == "brick" ){
+            Brick* b = new Brick( vec2( 40 + x * 18, 40 + y * 18), 14 );
+            bricks.push_back( b );
+        } else {
+            Brick* b = new ExplosiveBrick( vec2( 40 + x * 18, 40 + y * 18), 14 );
+            bricks.push_back( b );
+        }
     }
     void kill( Brick* b ){
         for( vector<Brick*>::iterator j = bricks.begin(); j < bricks.end(); ){
@@ -105,6 +110,7 @@ class BreakoutApp : public App {
     
     float dt = 1.0f / 60.0f;
     float mx;
+    vec2 mousepos;
     Ball ball;
     Paddle paddle;
     CollisionManager collisions;
@@ -124,7 +130,7 @@ void BreakoutApp::setup(){
     ball = *new Ball();
     collisions = *new CollisionManager( 400, 800 );
     lighting = *new Lighting();
-    renderer = *new GameRenderer( toPixels( getWindowSize() ) );
+    renderer = *new GameRenderer( toPixels( getWindowSize() ) , lighting.getLightCount() );
     debris = *new DebrisManager();
     
     int i = 0;
@@ -132,7 +138,9 @@ void BreakoutApp::setup(){
     while( i < 100 ){
         for (int x = 0; x < 18; x++) { //18
             if( Rand::randFloat() < 0.7 && x != 8 && x != 9 && x != 10 ){
-                bricks.addBrick( x, y );
+                string type = "brick";
+                if( Rand::randFloat() < 0.2 ) type = "explsoive";
+                bricks.addBrick( x, y, type );
                 i++;
             }
         }
@@ -145,6 +153,7 @@ void BreakoutApp::mouseDown( MouseEvent event ){}
 
 void BreakoutApp::mouseMove( MouseEvent event ){
     mx = event.getPos().x;
+    mousepos = event.getPos();
 }
 
 bool BreakoutApp::affectBall( Collision pt ){
@@ -157,7 +166,7 @@ bool BreakoutApp::affectBall( Collision pt ){
 
 void BreakoutApp::update(){
     paddle.update( mx );
-    ball.update( dt );
+//    ball.update( dt );
     debris.update( dt );
     
     vector<Brick*> allBricks = bricks.getBricks();
@@ -177,24 +186,17 @@ void BreakoutApp::update(){
             return;
         }
     }
-    renderer.drawLightGlows(0, ball.pos, 150 );
-    renderer.drawShadow(0, lighting.getShadowShape( 0, paddle ), 1.0f );
     
-    lighting.lights.at(0)->pos = ball.pos;
+    lighting.drawLightGlow( &renderer );
+
+    lighting.cast( &renderer, paddle );
+    ball.pos = mousepos;
+    lighting.setLightPosition( 0, ball.pos );
+    
     
     for (int i = 0; i < allBricks.size() ; i++) {
         Block* ab = allBricks.at(i);
-        ab->highlight = 0.0f;
-        int lightIndex = 0;
-        if( lighting.withinRange( lightIndex, ab->pos ) ){
-
-            float lum = lighting.getLum( lightIndex , ab->pos );
-            vector<vec2> shadowShape = lighting.getShadowShape( lightIndex, *ab);
-            float edgeLum = 10.0f * lum;
-            renderer.drawShadow( lightIndex, shadowShape, edgeLum );
-            ab->incHighlight( lum );
-            
-        }
+        lighting.cast( &renderer, *ab );
     }
 }
 

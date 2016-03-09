@@ -42,7 +42,7 @@ class Ball {
     vec2 pos;
     vec2 vel;
     vec2 pvel;
-    float radius = 10.0f;
+    float radius = 3.0f;
 };
 
 #endif /* Ball_hpp */

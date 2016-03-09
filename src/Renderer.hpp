@@ -18,11 +18,12 @@ using namespace ci;
 class GameRenderer {
   public:
     GameRenderer(){};
-    GameRenderer( vec2 windowsize );
+    GameRenderer( vec2 windowsize, int lightcount );
     void drawBackground();
     void drawBall( vec2 pos, float r );
     void drawPaddle( vec2 pos, float w, float h );
-    void drawBrick( std::string type, float l, float t, float w, float h );
+    void drawBrick( std::string type, float l, float t, float w, float h, float c );
+    void drawExplosiveBrick( std::string type, float l, float t, float w, float h, float c );
     void drawExplosion( vec2 pos, float life );
     void drawDebris( vec2 pos, float radius, float angle, float highlight);
     void drawShadows( int lightIndex, std::vector< std::vector<vec2> > shadows );
@@ -35,6 +36,7 @@ class GameRenderer {
     void setBlendFunction( std::string bf );
     gl::FboRef finalLightingFbo;
     gl::FboRef lightSourceFbo; //this will be a collection eventually
+    std::vector< gl::FboRef > lightSourceFbos;
     gl::FboRef lightSourceTexture;
     
 };

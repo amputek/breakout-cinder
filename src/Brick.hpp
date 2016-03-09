@@ -25,10 +25,27 @@ public:
     }
     void update( float dt );
     void draw( GameRenderer *renderer ){
-        renderer->drawBrick("brick",left,top,width,highlight);
+        count += 0.15f;
+        renderer->drawBrick(type,left,top,width,highlight,sin(count) * 0.02f );
     }
-    
+    float count = 0.0f;
     std::string type = "brick";
+};
+
+class ExplosiveBrick : public Brick {
+  public:
+    ExplosiveBrick(){
+        left = 1;
+        top = 1;
+        right = 4;
+        bottom = 4;
+        type = "explosive";
+        count = Rand::randFloat() * 3.0f;
+    };
+    ExplosiveBrick( vec2 p, float w ) : Brick( p, w ){
+        type = "explosive";
+        count = Rand::randFloat() * 3.0f;
+    }
 };
 
 
