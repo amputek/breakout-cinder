@@ -10,7 +10,7 @@
 
 
 Lighting::Lighting(){
-//    lights.push_back( *new Light() );
+    lights.push_back( new Light( vec2(10,10), 150.0f ) );
 }
 
 float Lighting::generateHighlight( Light &source, Block &object, float lum ){
@@ -21,13 +21,19 @@ float Lighting::generateHighlight( Light &source, Block &object, float lum ){
     return l;
 }
 
-vector<vec2> Lighting::getShadow( vec2 source, Block &object ){
-    float dist = distance(source,object.pos);
+
+
+vector<vec2> Lighting::getShadowShape( int index, Block &object ){
+//    float dist = distance(source,object.pos);
+    vec2 source = lights.at(index)->pos;
+    
     float angle = atan2( object.pos.y - source.y, object.pos.x - source.x);
     
     vec2 cornerA = vec2(0,0);
     vec2 cornerB = vec2(0,0);
     vec2 cornerC = vec2(0,0);
+    
+    bool hasCornerC = false;
     
     if( source.y < object.pos.y and abs(object.pos.x - source.x) < object.width){
         
@@ -54,24 +60,28 @@ vector<vec2> Lighting::getShadow( vec2 source, Block &object ){
         cornerA = vec2( object.left, object.bottom );
         cornerB = vec2( object.right, object.top );
         cornerC = vec2( object.left, object.top );
+        hasCornerC = true;
         
     } else if(angle > M_PI/2 and angle < M_PI){
         
         cornerA = vec2( object.left, object.top );
         cornerB = vec2( object.right, object.bottom );
         cornerC = vec2( object.right, object.top );
+        hasCornerC = true;
         
     } else if(angle > -M_PI and angle < -M_PI/2 ){
         
         cornerA = vec2( object.right, object.top );
         cornerB = vec2( object.left, object.bottom );
         cornerC = vec2( object.right, object.bottom );
+        hasCornerC = true;
         
     } else if(angle > -M_PI/2 and angle < 0){
         
         cornerA = vec2( object.right, object.bottom );
         cornerB = vec2( object.left, object.top );
         cornerC = vec2( object.left, object.bottom );
+        hasCornerC = true;
         
     }
     
@@ -86,11 +96,22 @@ vector<vec2> Lighting::getShadow( vec2 source, Block &object ){
     vec2 cornerFarB = vec2( source.x + cos( newangle1 ) * limit, source.y + sin( newangle1 ) * limit );
     
     
-    vector<vec2> result(4);
+    vector<vec2> result( hasCornerC ? 5 : 4 );
     result[0] = cornerA;
     result[1] = cornerFarA;
     result[2] = cornerFarB;
     result[3] = cornerB;
-    
+    if( hasCornerC ) result[4] = cornerC;
+        
     return result;
+}
+
+vector< vector<vec2> > Lighting::getShadows( vec2 source, vector<Block*> objects ){
+    vector<vector<vec2>> v(100, vector<vec2>(5) );
+    for (int i = 0; i < objects.size(); i++) {
+        Block b = *objects.at(i);
+        vector<vec2> corners = getShadowShape( source, b );
+        v.push_back( corners );
+     }
+    return v;
 }

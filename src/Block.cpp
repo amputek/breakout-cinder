@@ -7,3 +7,8 @@
 //
 
 #include "Block.hpp"
+
+//void Block::incHighlight( float f ){
+//    highlight += f;
+//    std::cout << "block: " << highlight << " " << &highlight << "\n";
+//}

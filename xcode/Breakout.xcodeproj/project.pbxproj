@@ -28,6 +28,7 @@
 		D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E01C7ED9850007C089 /* Paddle.cpp */; };
 		D427A3E51C7EE2D30007C089 /* Collisions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427A3E31C7EE2D30007C089 /* Collisions.cpp */; };
 		D4D1EB7D1C8083B6001A6AD5 /* Brick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */; };
+		D4EF9F4A1C849AB9008758EE /* Debris.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4EF9F481C849AB9008758EE /* Debris.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,8 @@
 		D427A3E41C7EE2D30007C089 /* Collisions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Collisions.hpp; path = ../src/Collisions.hpp; sourceTree = "<group>"; };
 		D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Brick.cpp; path = ../src/Brick.cpp; sourceTree = "<group>"; };
 		D4D1EB7C1C8083B6001A6AD5 /* Brick.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Brick.hpp; path = ../src/Brick.hpp; sourceTree = "<group>"; };
+		D4EF9F481C849AB9008758EE /* Debris.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Debris.cpp; path = ../src/Debris.cpp; sourceTree = "<group>"; };
+		D4EF9F491C849AB9008758EE /* Debris.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Debris.hpp; path = ../src/Debris.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 				D425BC8D1C82A29300B08EFD /* Math.hpp */,
 				D427A3E31C7EE2D30007C089 /* Collisions.cpp */,
 				D427A3E41C7EE2D30007C089 /* Collisions.hpp */,
+				D4EF9F481C849AB9008758EE /* Debris.cpp */,
+				D4EF9F491C849AB9008758EE /* Debris.hpp */,
 				D425BC921C8405C800B08EFD /* Block.cpp */,
 				D425BC931C8405C800B08EFD /* Block.hpp */,
 				D4D1EB7B1C8083B6001A6AD5 /* Brick.cpp */,
@@ -261,6 +266,7 @@
 			files = (
 				D425BC941C8405C800B08EFD /* Block.cpp in Sources */,
 				D427A3DF1C7ED9280007C089 /* Ball.cpp in Sources */,
+				D4EF9F4A1C849AB9008758EE /* Debris.cpp in Sources */,
 				D425BC8E1C82A29300B08EFD /* Math.cpp in Sources */,
 				D425BC8B1C82A20100B08EFD /* Lighting.cpp in Sources */,
 				D427A3E21C7ED9850007C089 /* Paddle.cpp in Sources */,

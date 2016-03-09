@@ -4,6 +4,7 @@
 #include "Paddle.hpp"
 #include "Ball.hpp"
 #include "Brick.hpp"
+#include "Debris.hpp"
 #include "Collisions.hpp"
 #include "Lighting.hpp"
 #include "Math.hpp"
@@ -14,6 +15,72 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 using namespace math;
+
+class DebrisManager{
+  public:
+    DebrisManager(){}
+    vector<Debris*> debris;
+    void addDebris( vec2 p, vec2 v ){
+        for( int i = 0; i < 5; i ++){
+            vec2 vel = vec2( v * Rand::randFloat(4.0f, 20.0f) );
+            vel += Rand::randVec2() * Rand::randFloat(30.0f, 100.0f);
+            vec2 pos = p + (Rand::randVec2() *= Rand::randFloat(0.0f, 10.0f));
+            Debris* d = new Debris( pos, vel, Rand::randFloat(2.0f, 6.0f), Rand::randFloat(-10.0f, 10.0f) );
+            debris.push_back( d );
+        }
+        
+    }
+    void update(float dt){
+        for(int i = 0; i < debris.size();  i++){ debris.at(i)->update( dt );  }
+        for( vector<Debris*>::iterator d = debris.begin(); d < debris.end(); ){
+            if( (*d)->getY() > 900 ){
+                d = debris.erase(d);
+            } else {
+                ++d;
+            }
+        }
+        
+    }
+    void draw( GameRenderer *renderer){
+        for(int i = 0; i < debris.size();  i++){ debris.at(i)->draw( renderer );  }
+    }
+    
+};
+
+
+
+class BricksManager{
+public:
+    BricksManager(){}
+    vector<Brick*> bricks;
+    void addBrick( int x, int y ){
+        Brick* b = new Brick( vec2( 40 + x * 18, 40 + y * 18), 14 );
+        bricks.push_back( b );
+    }
+    void kill( Brick* b ){
+        for( vector<Brick*>::iterator j = bricks.begin(); j < bricks.end(); ){
+            if( b == *j ){
+                j = bricks.erase(j);
+            } else {
+                ++j;
+            }
+        }
+        
+    }
+    void update(float dt){
+
+    }
+    void draw( GameRenderer *renderer){
+        for(int i = 0; i < bricks.size();  i++){
+            bricks.at(i)->draw( renderer );
+        }
+        
+    }
+    vector<Brick*> getBricks(){
+        return bricks;
+    }
+    
+};
 
 
 class BreakoutApp : public App {
@@ -29,8 +96,9 @@ class BreakoutApp : public App {
   private:
     
     void drawShadow( vector<vec2> );
-    
+    bool affectBall( Collision col );
     void setBlendFunction( string bf );
+    void addDebris( vec2 pos, vec2 v );
     
     Lighting lighting;
     GameRenderer renderer;
@@ -40,30 +108,37 @@ class BreakoutApp : public App {
     Ball ball;
     Paddle paddle;
     CollisionManager collisions;
+    DebrisManager debris;
+    BricksManager bricks;
     
-    Brick bricks[100];
-
+    int fc = 0;
 };
+
 
 void BreakoutApp::setup(){
     setWindowSize( 400, 800 );
+    setFrameRate( 60.0f );
+    
+
     paddle = *new Paddle();
     ball = *new Ball();
     collisions = *new CollisionManager( 400, 800 );
     lighting = *new Lighting();
     renderer = *new GameRenderer( toPixels( getWindowSize() ) );
+    debris = *new DebrisManager();
     
     int i = 0;
     int y = 0;
     while( i < 100 ){
-        for (int x = 0; x < 16; x++) {
-            if( Rand::randBool() ){
-                bricks[i] = *new Brick( vec2( 20 + x * 24, 20 + y * 24) );
+        for (int x = 0; x < 18; x++) { //18
+            if( Rand::randFloat() < 0.7 && x != 8 && x != 9 && x != 10 ){
+                bricks.addBrick( x, y );
                 i++;
             }
         }
         y++;
     }
+    
 }
 
 void BreakoutApp::mouseDown( MouseEvent event ){}
@@ -72,40 +147,67 @@ void BreakoutApp::mouseMove( MouseEvent event ){
     mx = event.getPos().x;
 }
 
+bool BreakoutApp::affectBall( Collision pt ){
+    if( pt.exists ){
+        if( pt.dir == "top" || pt.dir == "bottom" ) ball.bounce( "vert" , pt.pos.y );
+        if( pt.dir == "left" || pt.dir == "right" ) ball.bounce( "hor" , pt.pos.x );
+    }
+    return pt.exists;
+}
+
 void BreakoutApp::update(){
     paddle.update( mx );
     ball.update( dt );
-    collisions.paddleCollision( &ball, &paddle );
-    collisions.wallCollision( &ball );
-    collisions.brickCollision( &ball, bricks );
-    for (int i = 0; i < sizeof(*bricks); i++) {
-        if( bricks[i].isAlive() ){
-            if( collisions.brickCollision( &ball, &bricks[i] ) ){
-               bricks[i].kill();
-            }
+    debris.update( dt );
+    
+    vector<Brick*> allBricks = bricks.getBricks();
+
+    if( affectBall( collisions.paddleCollision( ball.pos, ball.vel, ball.radius, &paddle ) ) ){
+        ball.vel.x += paddle.vx * 0.1;
+    }
+    
+    affectBall( collisions.wallCollision( ball.pos, ball.vel, ball.radius ) );
+
+    for (int i = 0; i < allBricks.size() ; i++) {
+        Block b = *allBricks.at(i);
+
+        if( affectBall( collisions.brickCollision( ball.pos, ball.vel, ball.radius, &b ) ) ){
+            bricks.kill( allBricks.at(i) );
+            debris.addDebris( allBricks.at(i)->pos, ball.pvel );
+            return;
         }
     }
-    renderer.drawLightGlows(0, ball.pos, 200 );
-    renderer.drawShadow(0, lighting.getShadow( ball.pos, paddle ) );
-    for (int i = 0; i < sizeof(*bricks); i++) {
-        if( bricks[i].isAlive() ){
-            renderer.drawShadow( 0, lighting.getShadow( ball.pos, bricks[i] ) );
+    renderer.drawLightGlows(0, ball.pos, 150 );
+    renderer.drawShadow(0, lighting.getShadowShape( 0, paddle ), 1.0f );
+    
+    lighting.lights.at(0)->pos = ball.pos;
+    
+    for (int i = 0; i < allBricks.size() ; i++) {
+        Block* ab = allBricks.at(i);
+        ab->highlight = 0.0f;
+        int lightIndex = 0;
+        if( lighting.withinRange( lightIndex, ab->pos ) ){
+
+            float lum = lighting.getLum( lightIndex , ab->pos );
+            vector<vec2> shadowShape = lighting.getShadowShape( lightIndex, *ab);
+            float edgeLum = 10.0f * lum;
+            renderer.drawShadow( lightIndex, shadowShape, edgeLum );
+            ab->incHighlight( lum );
+            
         }
     }
 }
 
 
 void BreakoutApp::draw(){
-    
     renderer.drawBackground();
     renderer.drawLighting();
     paddle.draw( &renderer );
-    
-    for (int i = 0; i < sizeof(*bricks); i++) {
-        if( bricks[i].isAlive() ) bricks[i].draw( &renderer );
-    }
-    
+    bricks.draw( &renderer );
     ball.draw( &renderer );
+    debris.draw( &renderer );
+    
+    gl::drawString( "Framerate: " + to_string(getAverageFps()), vec2( 10.0f, 10.0f ) );
 }
 
 CINDER_APP( BreakoutApp, RendererGl )

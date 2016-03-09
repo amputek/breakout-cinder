@@ -33,37 +33,27 @@ void CollisionManager::checkCollision( Collision *pt, vec2 a, vec2 b, vec2 c, ve
     }
 }
 
-void CollisionManager::paddleCollision( Ball *ball, Block *rec ){
-//    Block r = *(Block*) rec;
-    ballIntercept( ball, rec );
+Collision CollisionManager::paddleCollision( vec2 pos, vec2 vel, float r, Block *rec ){
+    return ballIntercept( pos, vel, r, rec );
 }
 
-bool CollisionManager::brickCollision( Ball *ball, Block *brick ){
-//    for (int i = 0; i < sizeof(*bricks); i++) {
-//        if( bricks[i].isAlive() ){
-    return ballIntercept( ball, brick );
-//            if( a ){
-//                bricks[i].kill();
-//                return;
-//            }
-//        }
-//    }
+Collision CollisionManager::brickCollision( vec2 pos, vec2 vel, float r, Block *brick ){
+    return ballIntercept( pos, vel, r, brick );
 }
 
-void CollisionManager::wallCollision( Ball *ball ){
-    ballIntercept( ball, &topWall );
-    ballIntercept( ball, &leftWall );
-    ballIntercept( ball, &rightWall );
+Collision CollisionManager::wallCollision( vec2 pos, vec2 vel, float r ){
+    Collision pt = ballIntercept( pos, vel, r, &topWall );
+    if( !pt.exists ) pt = ballIntercept( pos, vel, r, &leftWall );
+    if( !pt.exists ) pt = ballIntercept( pos, vel, r, &rightWall );
+    return pt;
 }
 
-bool CollisionManager::ballIntercept( Ball *ball, Block *rec ){
+Collision CollisionManager::ballIntercept( vec2 pos, vec2 vel, float r, Block *rec ){
+
+    Collision pt;
     
-    
-    Collision* pt = new Collision();
-    
-    float radius = ball->radius;
-    vec2 vel = ball->vel;
-    vec2 bal = ball->pos;
+    float radius = r;
+    vec2 bal = pos;
 
     vec2 topleft = vec2( rec->left-radius  , rec->top-radius );
     vec2 bottomleft = vec2( rec->left-radius, rec->bottom+radius);
@@ -71,31 +61,32 @@ bool CollisionManager::ballIntercept( Ball *ball, Block *rec ){
     vec2 topright = vec2( rec->right+radius , rec->top-radius );
     
     if( vel.x < 0){
-        checkCollision( pt, bal, bal+vel, topright, bottomright, "right" );
+        checkCollision( &pt, bal, bal+vel, topright, bottomright, "right" );
     } else {
-        checkCollision( pt, bal, bal+vel, topleft, bottomleft, "left" );
+        checkCollision( &pt, bal, bal+vel, topleft, bottomleft, "left" );
     }
-    if( pt->exists == false ){
+    if( pt.exists == false ){
         if( vel.y < 0){
-            checkCollision( pt, bal, bal+vel, bottomleft, bottomright, "bottom" );
+            checkCollision( &pt, bal, bal+vel, bottomleft, bottomright, "bottom" );
         } else {
-            checkCollision( pt, bal, bal+vel, topleft, topright, "top" );
+            checkCollision( &pt, bal, bal+vel, topleft, topright, "top" );
         }
     }
+    return pt;
 
-    if( pt->exists ){
-        if( pt->dir == "top" || pt->dir == "bottom" ){
-            ball->bounce( "vert" , pt->pos.y );
-        }
-        if( pt->dir == "left" || pt->dir == "right" ){
-            ball->bounce( "hor" , pt->pos.x );
-        }
-        delete pt;
-        return true;
-    }
-    
-    delete pt;
-    return false;
+//    if( pt->exists ){
+//        if( pt->dir == "top" || pt->dir == "bottom" ){
+//            ball->bounce( "vert" , pt->pos.y );
+//        }
+//        if( pt->dir == "left" || pt->dir == "right" ){
+//            ball->bounce( "hor" , pt->pos.x );
+//        }
+//        delete pt;
+//        return true;
+//    }
+//    
+//    delete pt;
+//    return false;
     
     
 }

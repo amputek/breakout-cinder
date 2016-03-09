@@ -10,10 +10,12 @@
 #define Block_hpp
 
 #include <stdio.h>
+#include "Renderer.hpp"
+
 using namespace ci;
 
 class Block {
-public:
+  public:
     Block(){
         pos = vec2(0,0);
         left = pos.x - 10;
@@ -32,7 +34,9 @@ public:
         width = w;
         height = h;
     }
-    
+    void incHighlight( float f ){
+        highlight = f;
+    }
     ci::vec2 pos;
     float left;
     float top;
@@ -40,7 +44,10 @@ public:
     float right;
     float width;
     float height;
+    float highlight;
     
+    void draw( GameRenderer *renderer );
+
 
 };
 

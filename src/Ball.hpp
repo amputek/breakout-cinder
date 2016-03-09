@@ -19,8 +19,8 @@ class Ball {
     Ball(){
         pos.x = 250;
         pos.y = 300;
-        vel.x = -1;
-        vel.y = -2;
+        vel.x = -3;
+        vel.y = -6;
     }
     void update( float dt ){
         pos += vel;
@@ -29,6 +29,7 @@ class Ball {
         renderer->drawBall( pos, radius );
     }
     void bounce( std::string dir, float p ){
+        pvel = vec2( vel );        
         if( dir == "hor" ){
             vel.x = -vel.x;
             pos.x = p;
@@ -36,11 +37,11 @@ class Ball {
             vel.y = -vel.y;
             pos.y = p;
         }
-
     }
     
     vec2 pos;
     vec2 vel;
+    vec2 pvel;
     float radius = 10.0f;
 };
 
