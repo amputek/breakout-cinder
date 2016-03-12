@@ -14,38 +14,51 @@
 
 class Brick : public Block {
 public:
-    Brick(){
-        left = 1;
-        top = 1;
-        right = 4;
-        bottom = 4;
-    };
-    Brick( vec2 p, float w ) : Block( p, w, w ){
-
-    }
-    void update( float dt );
-    void draw( GameRenderer *renderer ){
-        count += 0.15f;
-        renderer->drawBrick(type,left,top,width,highlight,sin(count) * 0.02f );
-    }
-    float count = 0.0f;
+    Brick(){};
+    Brick( vec2 p, float w ) : Block( p, w, w ){}
+    virtual void update( float dt ){ }
+    virtual void draw( GameRenderer *renderer ){ }
     std::string type = "brick";
+    bool dead = false;
+    bool isDead(){ return dead; }
+    void kill(){ dead = true; }
+    bool casting = false;
 };
+
+class StandardBrick : public Brick {
+public:
+    StandardBrick(){
+        type = "brick";
+    };
+    StandardBrick( vec2 p, float w ) : Brick( p, w ){
+        type = "brick";
+    }
+    void draw( GameRenderer *renderer ){
+        renderer->drawBrick(type,left,top,width,highlight,casting);
+    }
+
+};
+
 
 class ExplosiveBrick : public Brick {
   public:
     ExplosiveBrick(){
-        left = 1;
-        top = 1;
-        right = 4;
-        bottom = 4;
         type = "explosive";
-        count = Rand::randFloat() * 3.0f;
+        count = Rand::randFloat() * 3.142;
     };
     ExplosiveBrick( vec2 p, float w ) : Brick( p, w ){
         type = "explosive";
-        count = Rand::randFloat() * 3.0f;
+        count = Rand::randFloat() * 3.142f;
     }
+    void update( float dt ){
+        count += 7.0f * dt;
+    }
+    void draw( GameRenderer *renderer ){
+        renderer->drawExplosiveBrick(type,left,top,width,highlight,sin(count) * 0.07f );
+    }
+  private:
+    float count = 0.0f;
+
 };
 
 

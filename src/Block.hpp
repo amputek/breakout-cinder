@@ -10,13 +10,13 @@
 #define Block_hpp
 
 #include <stdio.h>
-#include "Renderer.hpp"
+#include "GameObject.hpp"
 
 using namespace ci;
 
-class Block {
+class Block : public GameObject {
   public:
-    Block(){
+    Block() : GameObject(){
         pos = vec2(0,0);
         left = pos.x - 10;
         top = pos.y - 10;
@@ -25,7 +25,7 @@ class Block {
         width = 50;
         height = 50;
     }
-    Block( vec2 p, float w, float h ){
+    Block( vec2 p, float w, float h ) : GameObject(){
         pos = p;
         left = pos.x - w/2;
         top = pos.y - h/2;
@@ -37,6 +37,7 @@ class Block {
     void incHighlight( float f ){
         highlight = f;
     }
+    virtual bool isDead(){ return false; }
     ci::vec2 pos;
     float left;
     float top;
@@ -45,10 +46,6 @@ class Block {
     float width;
     float height;
     float highlight;
-    
-    void draw( GameRenderer *renderer );
-
-
 };
 
 #endif /* Block_hpp */

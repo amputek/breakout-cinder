@@ -11,8 +11,8 @@
 
 Lighting::Lighting(){
     lights.push_back( new Light( vec2(10,10), 150.0f ) );
-    lights.push_back( new Light( vec2(200,30), 100.0f ) );
-    lights.push_back( new Light( vec2(200,780), 200.0f ) );
+//    lights.push_back( new Light( vec2(200,30), 100.0f ) );
+//    lights.push_back( new Light( vec2(200,780), 200.0f ) );
 }
 
 

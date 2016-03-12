@@ -54,6 +54,7 @@ void GameRenderer::drawBackground(){
     gl::enableAdditiveBlending();
     gl::clear( Color( 0, 0, 0 ) );
 }
+
 void GameRenderer::drawBall( vec2 pos, float r ){
     gl::color( Color( 1.0f, 0.7f, 0.2f ) );
     gl::drawSolidCircle(pos, r+2);
@@ -65,31 +66,30 @@ void GameRenderer::drawPaddle( vec2 pos, float w, float h ){
     gl::color( Color( 0.05f, 0.1f, 0.15f ) );
     gl::drawSolidRect( Rectf( pos.x - w/2, pos.y - h/2, pos.x + w/2, pos.y + h/2 ) );
 }
-void GameRenderer::drawBrick( std::string type, float l, float t, float w, float h, float c ){
-    if( type == "brick" ){
-        gl::color( Color( 0.01f + h * 0.5, 0.02f + h * 1.0, 0.03f + h * 1.5) );
-    } else {
-        gl::color( Color( 0.1f  + (h * 2.5) + c , 0.05f + (h * 0.5) + c, 0.0f + (h * 0.5) + c ) );
-    }
+void GameRenderer::drawBrick( std::string type, float l, float t, float w, float h, bool casting ){
+    gl::color( Color( 0.01f + h * 0.5, 0.02f + h * 1.0, 0.03f + h * 1.5) );
+    if( casting ) gl::color( Color(1.0f,0.0f,0.0f));
     gl::drawSolidRect( Rectf( l, t, l+w, t+w ) );
-    if( type == "explosive" ){
-        gl::color( Color( 0.2f  + (h * 2.5) + c , 0.1f + (h * 0.5) + c, 0.0f + (h * 0.5) + c ) );
-        gl::drawLine( vec2( l   + 4.0f , t + 4.0f ), vec2( l+w - 4.0f , t+w - 4.0f ) );
-        gl::drawLine( vec2( l+w - 4.0f , t + 4.0f ), vec2( l   + 4.0f , t+w - 4.0f ) );
-        gl::drawStrokedRect( Rectf( l, t, l+w, t+w ) );
-    }
-    
 }
 
 void GameRenderer::drawExplosiveBrick( std::string type, float l, float t, float w, float h, float c ){
     gl::color( Color( 0.1f  + (h * 2.5) + c , 0.05f + (h * 0.5) + c, 0.0f + (h * 0.5) + c ) );
     gl::drawSolidRect( Rectf( l, t, l+w, t+w ) );
+    gl::color( Color( 0.3f  + (h * 2.5) + c , 0.2f + (h * 0.5) + c, 0.0f + (h * 0.5) + c ) );
+    gl::drawStrokedRect( Rectf( l, t, l+w, t+w ) );
+    gl::drawLine( vec2( l   + 4.0f , t + 4.0f ), vec2( l+w - 4.0f , t+w - 4.0f ) );
+    gl::drawLine( vec2( l+w - 4.0f , t + 4.0f ), vec2( l   + 4.0f , t+w - 4.0f ) );
+
 }
 
 
 void GameRenderer::drawExplosion( vec2 pos, float life ){
-    
+    gl::color( ColorA( 1.0f, 0.5f, 0.4f, 1.0f - (life / 100.0f) ) );
+    gl::drawStrokedCircle( pos, life );
+    gl::color( ColorA( 1.0f, 0.5f, 0.4f, 0.5f - (life / 200.0f) ) );
+    gl::drawSolidCircle( pos, life );
 }
+
 void GameRenderer::drawDebris( vec2 pos, float radius, float angle, float highlight){
     gl::pushModelMatrix();
     gl::color( Color( 0.1f, 0.2f, 0.3f) );
@@ -139,6 +139,7 @@ void GameRenderer::drawLighting(){
     setBlendFunction("source-over");
     
 }
+
 
 
 void GameRenderer::drawShadow( int lightIndex, std::vector<vec2> s, float dist ){

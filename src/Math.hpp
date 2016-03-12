@@ -19,5 +19,9 @@ namespace math {
     extern float getAngle(vec2 a, vec2 b);
 }
 
+namespace debug {
+    extern void log( string s );
+}
+
 
 #endif /* Math_hpp */

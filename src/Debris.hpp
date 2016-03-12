@@ -11,19 +11,20 @@
 
 #include <stdio.h>
 #include "Renderer.hpp"
+#include "GameObject.hpp"
 
 using namespace ci;
 
-class Debris {
+class Debris : public GameObject {
   public:
-    Debris(){
+    Debris() : GameObject(){
         pos = vec2(0,0);
         vel = vec2(0,0);
         radius = 5.0f;
         angle = 0.0f;
         vr = 0.0f;
     }
-    Debris( vec2 p, vec2 v, float r, float avr ){
+    Debris( vec2 p, vec2 v, float r, float avr ) : GameObject(){
         pos = p;
         vel = vec2(v * 2.0f);
         radius = r;
@@ -32,7 +33,6 @@ class Debris {
     void update( float dt ){
         pos += (vel * dt);
         vel *= (1.0 - (dt * 0.5));
-//        vel *= 0.998;
         vr *= (1.0 - dt * 0.01);
         angle += (vr * dt);
         vel.y += (1000.0f * dt);
@@ -42,6 +42,9 @@ class Debris {
     }
     float getY(){
         return pos.y;
+    }
+    bool isDead(){
+        return pos.y > 900;
     }
     
   private:

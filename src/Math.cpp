@@ -17,3 +17,9 @@ namespace math {
         return atan2( a.y - b.y, a.x - b.x );
     }
 }
+
+namespace debug {
+    void log( string s ){
+        cout << s << "\n";
+    }
+}
