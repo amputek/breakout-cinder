@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "Block.hpp"
+#include "Ball.hpp"
 
 using namespace ci;
 using namespace std;
@@ -26,12 +27,20 @@ class CollisionManager {
   public:
     CollisionManager(){};
     CollisionManager( int w, int h );
-    Collision paddleCollision( vec2 pos, vec2 vel, float r, Block *rec );
-    Collision wallCollision( vec2 pos, vec2 vel, float r );
-    Collision brickCollision( vec2 pos, vec2 vel, float r, Block *brick );
+    void affectBall( Ball * ball, vec2 pos, string dir ){
+        if( dir == "top"  || dir == "bottom" ) ball->bounce( "vert" , pos.y );
+        if( dir == "left" || dir == "right" ) ball->bounce( "hor" , pos.x );
+    }
+    bool wallCollision( Ball * ball );
+    bool ballCollision( Ball * ball, Block * rec );
+    Block * getWall( std::string s ){
+        if( s == "top" ) return &topWall;
+        if( s == "left" ) return &leftWall;
+        if( s == "right" ) return &rightWall;
+        return nullptr;
+    }
   private:
-    Collision ballIntercept( vec2 pos, vec2 vel, float r, Block *rec );
-    void checkCollision( Collision *pt, vec2 a, vec2 b, vec2 c, vec2 d, string dir );
+    bool checkCollision( Ball * ball, vec2 c, vec2 d, string dir );
     Block topWall;
     Block leftWall;
     Block rightWall;

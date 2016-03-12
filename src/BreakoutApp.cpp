@@ -5,6 +5,8 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
 #include "Debris.hpp"
+#include "Explosion.hpp"
+#include "EntityManager.hpp"
 #include "Collisions.hpp"
 #include "Lighting.hpp"
 #include "Math.hpp"
@@ -15,78 +17,6 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 using namespace math;
-
-class DebrisManager{
-  public:
-    DebrisManager(){}
-    vector<Debris*> debris;
-    void addDebris( vec2 p, vec2 v ){
-        for( int i = 0; i < 5; i ++){
-            vec2 vel = vec2( v * Rand::randFloat(4.0f, 20.0f) );
-            vel += Rand::randVec2() * Rand::randFloat(30.0f, 100.0f);
-            vec2 pos = p + (Rand::randVec2() *= Rand::randFloat(0.0f, 10.0f));
-            Debris* d = new Debris( pos, vel, Rand::randFloat(2.0f, 6.0f), Rand::randFloat(-10.0f, 10.0f) );
-            debris.push_back( d );
-        }
-        
-    }
-    void update(float dt){
-        for(int i = 0; i < debris.size();  i++){ debris.at(i)->update( dt );  }
-        for( vector<Debris*>::iterator d = debris.begin(); d < debris.end(); ){
-            if( (*d)->getY() > 900 ){
-                d = debris.erase(d);
-            } else {
-                ++d;
-            }
-        }
-        
-    }
-    void draw( GameRenderer *renderer){
-        for(int i = 0; i < debris.size();  i++){ debris.at(i)->draw( renderer );  }
-    }
-    
-};
-
-
-
-class BricksManager{
-public:
-    BricksManager(){}
-    vector<Brick*> bricks;
-    void addBrick( int x, int y, string type ){
-        if( type == "brick" ){
-            Brick* b = new Brick( vec2( 40 + x * 18, 40 + y * 18), 14 );
-            bricks.push_back( b );
-        } else {
-            Brick* b = new ExplosiveBrick( vec2( 40 + x * 18, 40 + y * 18), 14 );
-            bricks.push_back( b );
-        }
-    }
-    void kill( Brick* b ){
-        for( vector<Brick*>::iterator j = bricks.begin(); j < bricks.end(); ){
-            if( b == *j ){
-                j = bricks.erase(j);
-            } else {
-                ++j;
-            }
-        }
-        
-    }
-    void update(float dt){
-
-    }
-    void draw( GameRenderer *renderer){
-        for(int i = 0; i < bricks.size();  i++){
-            bricks.at(i)->draw( renderer );
-        }
-        
-    }
-    vector<Brick*> getBricks(){
-        return bricks;
-    }
-    
-};
-
 
 class BreakoutApp : public App {
   public:
@@ -116,6 +46,7 @@ class BreakoutApp : public App {
     CollisionManager collisions;
     DebrisManager debris;
     BricksManager bricks;
+    ExplosionManager explosions;
     
     int fc = 0;
 };
@@ -125,22 +56,26 @@ void BreakoutApp::setup(){
     setWindowSize( 400, 800 );
     setFrameRate( 60.0f );
     
+    //whats the difference?
+    paddle = Paddle();
+//    paddle = *new Paddle();
 
-    paddle = *new Paddle();
+    //BALL "ball" is a new ball (dereferenced from constructor)
     ball = *new Ball();
     collisions = *new CollisionManager( 400, 800 );
     lighting = *new Lighting();
     renderer = *new GameRenderer( toPixels( getWindowSize() ) , lighting.getLightCount() );
     debris = *new DebrisManager();
+    explosions = *new ExplosionManager();
     
     int i = 0;
     int y = 0;
     while( i < 100 ){
-        for (int x = 0; x < 18; x++) { //18
+        for (int x = 0; x < 18; x++) {
             if( Rand::randFloat() < 0.7 && x != 8 && x != 9 && x != 10 ){
                 string type = "brick";
                 if( Rand::randFloat() < 0.2 ) type = "explsoive";
-                bricks.addBrick( x, y, type );
+                bricks.add( x, y, type );
                 i++;
             }
         }
@@ -166,37 +101,45 @@ bool BreakoutApp::affectBall( Collision pt ){
 
 void BreakoutApp::update(){
     paddle.update( mx );
+    bricks.update( dt );
 //    ball.update( dt );
+    ball.pos = mousepos;
     debris.update( dt );
-    
-    vector<Brick*> allBricks = bricks.getBricks();
+    explosions.update(dt);
 
-    if( affectBall( collisions.paddleCollision( ball.pos, ball.vel, ball.radius, &paddle ) ) ){
+    int bricksSize = bricks.size();
+
+    
+    collisions.ballCollision( &ball, collisions.getWall("top") );
+    collisions.ballCollision( &ball, collisions.getWall("left") );
+    collisions.ballCollision( &ball, collisions.getWall("right") );
+    
+    if( collisions.ballCollision( &ball, &paddle ) ){
         ball.vel.x += paddle.vx * 0.1;
     }
-    
-    affectBall( collisions.wallCollision( ball.pos, ball.vel, ball.radius ) );
 
-    for (int i = 0; i < allBricks.size() ; i++) {
-        Block b = *allBricks.at(i);
+    for (int i = 0; i < bricksSize; i++) {
+        GameObject bb = *bricks.get( i );
+        Block b = *dynamic_cast<Block*>( bricks.get(i) );
+        Brick ab = *dynamic_cast<Brick*>( bricks.get(i) );
 
-        if( affectBall( collisions.brickCollision( ball.pos, ball.vel, ball.radius, &b ) ) ){
-            bricks.kill( allBricks.at(i) );
-            debris.addDebris( allBricks.at(i)->pos, ball.pvel );
+        if( collisions.ballCollision( &ball, &b ) ){
+            bricks.kill( i );
+            debris.add( b.pos, ball.pvel );
+            if( ab.type == "explosive" ) explosions.add( b.pos );
             return;
         }
     }
-    
-    lighting.drawLightGlow( &renderer );
 
-    lighting.cast( &renderer, paddle );
-    ball.pos = mousepos;
     lighting.setLightPosition( 0, ball.pos );
+    lighting.drawLightGlow( &renderer );
+    lighting.cast( &renderer, paddle );
     
+//    bricks.checkCast( ball.pos );
     
-    for (int i = 0; i < allBricks.size() ; i++) {
-        Block* ab = allBricks.at(i);
-        lighting.cast( &renderer, *ab );
+    for (int i = 0; i < bricksSize; i++) {
+        Block* b = dynamic_cast<Block*>( bricks.get(i) );
+        lighting.cast( &renderer, *b );
     }
 }
 
@@ -207,6 +150,7 @@ void BreakoutApp::draw(){
     paddle.draw( &renderer );
     bricks.draw( &renderer );
     ball.draw( &renderer );
+    explosions.draw( &renderer );
     debris.draw( &renderer );
     
     gl::drawString( "Framerate: " + to_string(getAverageFps()), vec2( 10.0f, 10.0f ) );
